@@ -1,0 +1,4 @@
+Challenge 1:Convert each integer to character to get the flag
+Challenge 2:Decode hex using unhexlify() to get the flag
+Challenge 3: decode hex text then encode into base64 to get the flag 
+Challenge 4:convert long to byte with the given function in the question to get the flag 
