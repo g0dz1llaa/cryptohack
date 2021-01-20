@@ -1,0 +1,10 @@
+Challenge 1://
+st = "label"
+f = ''
+for i in st:
+    f += chr(ord(i) ^ 13)
+print(f)
+//
+On running the following code we get the XORed word "aloha"
+therefore the flag is crypto{aloha}
+Challenge 2:
