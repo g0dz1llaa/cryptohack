@@ -1,0 +1,24 @@
+----------------------------------------------------
+Challenge 1 : Convert Hex to base64 using unhexlify and b64encode from binascii and base64 
+CODE :
+hex= '49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d'
+from binascii import unhexlify
+from base64 import b64encode
+pr = b64encode(unhexlify(hex))
+print(pr)
+---------------------------------------------------
+Challenge 2:
+CODE:Convert the given strings to bytes using unhexlify  and xor it with each other using the loop 
+     After the loop is executed 
+from binascii import unhexlify,hexlify
+
+
+
+t1 = '1c0111001f010100061a024b53535009181c'
+t2 = "686974207468652062756c6c277320657965"
+print(unhexlify(t1))
+bint1=bytes(unhexlify(t1))
+bint2=bytes(unhexlify(t2))
+x=bytes(x^y for x,y in zip(bint1,bint2))
+
+print(hexlify(x))
