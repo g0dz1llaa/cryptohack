@@ -7,9 +7,9 @@ from base64 import b64encode
 pr = b64encode(unhexlify(hex))
 print(pr)
 ---------------------------------------------------
-Challenge 2:
-CODE:Convert the given strings to bytes using unhexlify  and xor it with each other using the loop 
-     After the loop is executed 
+Challenge 2:Convert the given strings to bytes using unhexlify  and xor it with each other using the loop 
+     After the loop is executed convert x to hex and print 
+cODE :
 from binascii import unhexlify,hexlify
 
 
@@ -22,3 +22,51 @@ bint2=bytes(unhexlify(t2))
 x=bytes(x^y for x,y in zip(bint1,bint2))
 
 print(hexlify(x))
+-----------------------------------------------------
+Challenge 3 :
+CODE:
+from binascii import unhexlify,hexlify
+
+
+
+def bxor(a, b):
+    
+    return bytes([ x^y for (x,y) in zip(a, b)])
+
+
+ciphertext = unhexlify('1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736')
+
+
+text_chars = list(range(97, 122)) + [32]
+
+
+
+def attack(ctext):
+    
+    nice = None
+    for i in range(2**8): 
+        
+        ckey = i.to_bytes(1, byteorder='big')
+        keystream  = ckey * len(ctext)
+        candidate_message = bxor(ctext,keystream)
+        letters = sum([x in text_chars for x in candidate_message])
+
+        if nice == None or letters > nice['nb_letters']:
+
+            nice = {"message": candidate_message, 'nb_letters': letters, 'key': ckey}
+    return nice
+result = attack(ciphertext)
+
+print('key:', result['key'])
+print('message:', result['message'])
+
+WRITEUP:
+text_chars ia a list containing all letters and a space.
+Step 1: We'll pass the ciphertext to the attack fn.
+Step 2 : The attack function will xor it with each number from 1 to 256 
+Step 3:candidate_message contains the XORed value of ctextand key
+Step 4:In letters the sum of alphabets and spaces are stored.
+Step 5:The msg that has the greatest number of alphabets and spaces is stored in message of 'nice' tuple.
+Step 6:Msg and key is printed outside the attack function
+---------------------------------------------------------------------------------------------------
+
