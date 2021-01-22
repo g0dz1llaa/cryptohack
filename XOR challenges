@@ -7,4 +7,20 @@ print(f)
 //
 On running the following code we get the XORed word "aloha"
 therefore the flag is crypto{aloha}
+---------------------------------------------------------
 Challenge 2:
+Code:
+from binascii import unhexlify
+def xorit(s1,s2):
+    return ''.join(format(int(a, 16) ^ int(b, 16), 'x') for a,b in zip(s1,s2))
+KEY1 = "a6c8b6733c9b22de7bc0253266a3867df55acde8635e19c73313"
+KEY2 = xorit("37dcb292030faa90d07eec17e3b1c6d8daf94c35d4c9191a5e1e", KEY1)
+KEY3 = xorit("c1545756687e7573db23aa1c3452a098b71a7fbf0fddddde5fc1", KEY2)
+KEY4 = xorit(xorit(KEY1, KEY2), KEY3)
+FLAG = xorit("04ee9855208a2cd59091d04767ae47963170d1660df7f56f5faf", KEY4)
+print("[*] FLAG: {}".format(unhexlify(FLAG)))
+Writeup -
+Each key(from key 2) is produced by xoring it with the previous key 
+key 4 is produced by xoring xor of key1 and key2 with key 3 
+and finally the flag is produced by xoring the hex with key4 
+------------------------------------------------------------------
