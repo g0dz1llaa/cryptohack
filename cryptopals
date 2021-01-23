@@ -26,23 +26,11 @@ print(hexlify(x))
 Challenge 3 :
 CODE:
 from binascii import unhexlify,hexlify
-
-
-
 def bxor(a, b):
-    
-    return bytes([ x^y for (x,y) in zip(a, b)])
-
-
+     return bytes([ x^y for (x,y) in zip(a, b)])
 ciphertext = unhexlify('1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736')
-
-
 text_chars = list(range(97, 122)) + [32]
-
-
-
 def attack(ctext):
-    
     nice = None
     for i in range(2**8): 
         
@@ -63,10 +51,63 @@ print('message:', result['message'])
 WRITEUP:
 text_chars ia a list containing all letters and a space.
 Step 1: We'll pass the ciphertext to the attack fn.
-Step 2 : The attack function will xor it with each number from 1 to 256 
+Step 2 :The attack function will xor it with each number from 1 to 256 
 Step 3:candidate_message contains the XORed value of ctextand key
 Step 4:In letters the sum of alphabets and spaces are stored.
 Step 5:The msg that has the greatest number of alphabets and spaces is stored in message of 'nice' tuple.
 Step 6:Msg and key is printed outside the attack function
 ---------------------------------------------------------------------------------------------------
+Challenge 4:
+CODE:
+class InvalidMessageException(Exception):
+    pass
 
+def xor(ctext):
+    best = {"nb_letters": 0}
+    for i in range(2**8):
+        ckey = i.to_bytes(1, byteorder='big')
+        cmsg = bxor(ctext, ckey * len(ctext))
+        nb_letters = sum([x in ascii_text_chars for x in cmsg])
+        if nb_letters>best['nb_letters']:
+            best = {"message": cmsg, 'nb_letters': nb_letters, 'key': ckey}
+
+    if best['nb_letters'] > 0.7*len(ctext):
+        return best
+    else:
+        raise InvalidMessageException('best candidate message is: %s' % best['message'])
+
+
+with open('hex.txt') as data_file:
+    ciphertext_list = [
+
+        unhexlify(line.strip())
+        for line in data_file
+    ]
+
+
+
+candidates = list()
+
+for (line_nb, ciphertext) in enumerate(ciphertext_list):
+    try:
+        message = xor(ciphertext)['message']
+    except InvalidMessageException:
+        pass
+    else:
+        candidates.append({
+            'line_nb': line_nb,
+            'ciphertext': ciphertext,
+            'message': message
+        })
+
+
+else:
+    for (key, value) in candidates[0].items():
+        print(f'{key}: {value}')
+Writeup:
+Decoded hex text is sent to function xor which returns the best candidate of message along with the key
+The function xor will return the message and the key, ciphertext ,message  in the candidates list.
+The values will be printed.
+--------------------------------------------------------------------
+CHALLENGE 5:
+Code:
