@@ -177,7 +177,7 @@ if(hits==1):
 print True
 Writeup:
 first we check whether the length of the strings is correct or not.
-If the vlaue of hits is one then the cipher text is found.
+If the vlaue of hits is one then the key and uncipheredtext is found.
 
 
 
