@@ -111,3 +111,26 @@ The values will be printed.
 --------------------------------------------------------------------
 CHALLENGE 5:
 Code:
+from binascii import unhexlify
+msg = b"Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal"
+key = b'ICE'
+ks = key * (len(msg) // len(key) + 1)
+def bxor(a, b):
+
+    return bytes([ x^y for (x,y) in zip(a, b)])
+ciphertext = bxor(msg, ks)
+rslt = unhexlify(
+    b'0b3637272a2b2e63622c2e69692a23693a2a3c6324202d623d6'
+    b'3343c2a26226324272765272a282b2f20430a652e2c652a3124'
+    b'333a653e2b2027630c692b20283165286326302e27282f'
+)
+
+if(ciphertext == rslt):
+    print("founD")
+    
+Writeup:
+The key is repeated until it is equal to the length of the ciphertext.
+then its is xored using old bxor function result is compared with the initial hex 
+Its True.
+-------------------------------------------------------------------
+Challenge 6:
