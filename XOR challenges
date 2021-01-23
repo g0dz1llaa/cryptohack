@@ -24,3 +24,52 @@ Each key(from key 2) is produced by xoring it with the previous key
 key 4 is produced by xoring xor of key1 and key2 with key 3 
 and finally the flag is produced by xoring the hex with key4 
 ------------------------------------------------------------------
+Challenge 3:
+Code:
+from binascii import unhexlify
+def xor(str, key):
+    op = b''
+    for b in str:
+        op += bytes([b ^ key])
+    try:
+        return op.decode("utf-8")
+    except:
+        return "Cannot Decode some bytes"
+data = "73626960647f6b206821204f21254f7d694f7624662065622127234f726927756d"
+decoded = unhexlify(data)
+result = {}
+for i in range(256):
+    result[i] = (xor(decoded, i))  
+print("[*] FLAG: {}".format([s for s in result.values() if "crypto" in s]))
+Writeup:
+loop sends each of the 256 characters as key and the fucntion xor xors it with the decoded hex.
+If we find "crypto" in the xored stringit means we have found our flag then we print it.
+-------------------------------------------------------------------------------------------------
+Challenge 4:
+Code:
+from binascii import unhexlify
+def bruteforce(str, key):
+    op = b''
+    for b1, b2 in zip(str, key):
+        op += bytes([b1 ^ b2])
+    try:
+        return op.decode("utf-8")
+    except:
+        return "Cannot Decode some bytes"
+data = "0e0b213f26041e480b26217f27342e175d0e070a3c5b103e2526217f27342e175d0e077e263451150104"
+cipher = unhexlify(data)
+print(cipher)
+key_part = bruteforce(cipher[:7], "crypto{".encode())
+key = (key_part + "y").encode()
+key += key * int((len(cipher) - len(key))/len(key))
+key += key[:((len(cipher) - len(key))%len(key))]
+print(key)
+plain = bruteforce(cipher, key)
+print(plain)
+Writeup:
+This Challenge was little problematic for me . 
+First we xor seven chars of the decoded hex with "crypto{" in bruteforce manner ie. xoring it with each of the 256 characters.
+Then after findng the key we will extend its length to the length of the cipher text so that we can finally xor it with
+the decoded hex and and get the flag 
+------------------------------------------------------------------------------
+
